@@ -1,0 +1,26 @@
+---
+- name: GPU Operator | create ns
+  command: "kubectl create ns gpu-operator"
+  ignore_errors: true
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]
+
+- name: GPU Operator | add ns label
+  command: "kubectl label --overwrite ns gpu-operator pod-security.kubernetes.io/enforce=privileged"
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]
+
+- name: GPU Operator | Helm add Repo
+  command: "helm repo add nvidia https://helm.ngc.nvidia.com/nvidia"
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]
+
+- name: GPU Operator | Helm update
+  command: "helm repo update"
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]
+
+- name: GPU Operator | Helm install
+  command: "helm install --generate-name  -n gpu-operator --create-namespace nvidia/gpu-operator"
+  when:
+    - inventory_hostname == groups['kube_control_plane'][0]

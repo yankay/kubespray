@@ -1,0 +1,12 @@
+---
+gpu_operator_enabled: "{{ kubelet_rotate_server_certificates }}"
+gpu_operator_namespace: gpu-operator
+
+gpu_operator_repository_name: nvidia
+gpu_operator_repository_url: https://helm.ngc.nvidia.com/nvidia
+gpu_operator_chart_ref: "{{ gpu_operator_repository_name }}/gpu-operator"
+gpu_operator_chart_version: v23.9.2
+
+# Fill values override here
+# See upstream https://github.com/postfinance/kubelet-csr-approver
+gpu_operator_values: {}
