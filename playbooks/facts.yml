@@ -37,3 +37,9 @@
       setup:
         gather_subset: '!all,!min,hardware'
         filter: "ansible_*total_mb"
+
+    - name: Gather package facts
+      package_facts:
+        manager: auto
+      when:
+        - not ansible_os_family in ["Flatcar", "Flatcar Container Linux by Kinvolk"]

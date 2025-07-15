@@ -317,6 +317,22 @@ cloud_provider: ""
 # If you fill in a value other than the above, the check will fail.
 external_cloud_provider: ""
 
+# Get the version of the glibc package, supporting different OS package names
+glibc_package_version: >-
+  {% if ansible_os_family not in ["Flatcar", "Flatcar Container Linux by Kinvolk"] %}
+    {% if 'glibc' in ansible_facts.packages %}
+      {{ ansible_facts.packages['glibc'][0].version }}
+    {% elif 'libc6' in ansible_facts.packages %}
+      {{ ansible_facts.packages['libc6'][0].version }}
+    {% endif %}
+  {% endif %}
+
+# Extract the major and minor version (e.g., 2.31) from glibc_package_version
+glibc_version: >-
+  {% if glibc_package_version is defined and glibc_package_version|length > 0 %}
+    {{ glibc_package_version | trim | regex_search('[0-9]+\\.[0-9]+') }}
+  {% endif %}
+
 # Whether to deploy the container engine
 deploy_container_engine: "{{ 'k8s_cluster' in group_names or etcd_deployment_type == 'docker' }}"
 
@@ -410,7 +426,8 @@ docker_plugins: []
 containerd_use_systemd_cgroup: true
 
 # Use static containerd binary for compatibility with older distributions (e.g., Debian 11).
-containerd_static_binary: false
+# Defaults to true if glibc version < 2.34, otherwise false.
+containerd_static_binary: "{{ (glibc_version is defined and glibc_version and glibc_version is version('2.34', '<')) | bool }}"
 
 # Containerd conf default dir
 containerd_storage_dir: "/var/lib/containerd"
