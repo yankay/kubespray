@@ -1,0 +1,25 @@
+---
+description: Cross-check related K8s ecosystem projects when submitting PRs or Issues
+alwaysApply: true
+---
+
+# Cross-Check Related Projects
+
+When submitting **PRs** or **Issues** to kubespray, always check the following related projects for similar issues, similar solutions, or similar PRs:
+
+- [kubernetes/kubernetes](https://github.com/kubernetes/kubernetes)
+- [kubernetes/kubeadm](https://github.com/kubernetes/kubeadm)
+- [rancher/rke](https://github.com/rancher/rke)
+- [kubernetes/minikube](https://github.com/kubernetes/minikube)
+
+## What to look for
+
+1. **Similar issues**: Has the same bug or problem been reported there?
+2. **Similar solutions**: How did they fix it? Can we reference or adapt their approach?
+3. **Similar PRs**: Is there an ongoing or merged PR addressing the same concern?
+
+## How to check
+
+- Search each repo's Issues and PRs using relevant keywords
+- Use `gh search issues` and `gh search prs` CLI commands for efficient cross-repo search
+- Include links to related issues/PRs from these projects in the kubespray PR/Issue description when relevant
